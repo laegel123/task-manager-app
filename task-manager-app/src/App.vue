@@ -1,26 +1,52 @@
 <template>
-  <img alt="Vue logo" src="./assets/logo.png">
-  <HelloWorld msg="Welcome to Your Vue.js App"/>
+  <div :class="{ dark: themeStore.isDarkMode}">
+    <button @click="toggleDarkMode">
+      {{ themeStore.isDarkMode ? 'Light Mode' : 'Dark Mode' }}
+    </button>
+
+    <ul>
+      <li>
+        <router-link to="/">Task page</router-link>
+      </li>
+      <li>
+        <router-link to="/about">About page</router-link>
+      </li>
+    </ul>
+    <router-view />
+  </div>
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue'
+import { useTaskStore } from './store/taskStore'
+import { useThemeStore } from './store/themeStore'
 
 export default {
-  name: 'App',
-  components: {
-    HelloWorld
+  name:"App",
+  data(){
+    return{
+      themeStore: useThemeStore(),
+    }
+  },
+  methods:{
+    toggleDarkMode() {
+      this.themeStore.toggleDarkMode();
+    }
+  },
+  created() {
+    const taskStore = useTaskStore(); 
+    taskStore.loadTaskData();         
   }
 }
 </script>
 
 <style>
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
-}
+  body {
+    background-color: white;
+    color: black;
+  }
+
+  .dark {
+    background-color: #333;
+    color: white;
+  }
 </style>
